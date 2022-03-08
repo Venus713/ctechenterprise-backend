@@ -1,4 +1,6 @@
+import sys
 import locale
+import csv
 import math
 from math import sqrt
 from sklearn.metrics import mean_squared_error
@@ -524,6 +526,17 @@ class DataProcess:
     def __init__(self) -> None:
         pass
 
+    def is_validate_csv_file(self, filename: str) -> bool:
+        csv_file = open(filename, 'rb')
+        try:
+            dialect = csv.Sniffer().sniff(csv_file.read(1024))
+            csv_file.seek(0)
+            csv.reader(csv_file, dialect)
+            return True
+        except csv.Error:
+            # File appears not to be in CSV format; move along
+            return False
+
     def read_dataset(self, filename: str, seperator: str, header_exists: bool) -> pd.DataFrame:
         df1 = pd.DataFrame()
         if header_exists:
@@ -1048,6 +1061,10 @@ def main():
     dp = DataProcess()
     ipv4 = IPv4()
     ipv6 = IPv6()
+
+    if not dp.is_validate_csv_file():
+        print('File should be a CSV file')
+        sys.exit()
 
     eps = 1
     num_instances = 20
