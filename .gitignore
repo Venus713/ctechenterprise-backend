@@ -1,0 +1,6 @@
+app.spec
+dist
+build
+.vscode
+__pycache__
+.~lock.unsw-train-1k.csv#
