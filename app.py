@@ -1,4 +1,5 @@
 import sys
+import string
 import locale
 import csv
 import math
@@ -527,14 +528,17 @@ class DataProcess:
         pass
 
     def is_validate_csv_file(self, filename: str) -> bool:
-        csv_file = open(filename, 'rb')
         try:
-            dialect = csv.Sniffer().sniff(csv_file.read(1024))
-            csv_file.seek(0)
-            csv.reader(csv_file, dialect)
-            return True
+            with open(filename, newline='') as csvfile:
+                start = csvfile.read(4096)
+
+                # isprintable does not allow newlines, printable does not allow umlauts...
+                if not all([c in string.printable or c.isprintable() for c in start]):
+                    return False
+                csv.Sniffer().sniff(start)
+                return True
         except csv.Error:
-            # File appears not to be in CSV format; move along
+            # Could not get a csv dialect -> probably not a csv.
             return False
 
     def read_dataset(self, filename: str, seperator: str, header_exists: bool) -> pd.DataFrame:
@@ -1062,7 +1066,7 @@ def main():
     ipv4 = IPv4()
     ipv6 = IPv6()
 
-    if not dp.is_validate_csv_file():
+    if not dp.is_validate_csv_file(file_name):
         print('File should be a CSV file')
         sys.exit()
 
