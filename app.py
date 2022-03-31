@@ -19,7 +19,7 @@ import secrets
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--filename', type=str, required=True)
+parser.add_argument('-f', '--filename', type=str, required=True)
 args = parser.parse_args()
 
 
