@@ -20,6 +20,7 @@ import secrets
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--filename', type=str, required=True)
+parser.add_argument('-c', '--cols', type=str, required=False)
 args = parser.parse_args()
 
 
@@ -1061,6 +1062,7 @@ class DataProcess:
 
 def main():
     file_name = args.filename
+    col_list = args.cols
 
     dp = DataProcess()
     ipv4 = IPv4()
@@ -1078,9 +1080,10 @@ def main():
     priv = True
     acc = False
     header_exists = True
-    col_list = (
-        '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 '
-        '29 30 31 32 33 34 35 36 37 38 39 40 41')
+    if not col_list:
+        col_list = (
+            '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 '
+            '29 30 31 32 33 34 35 36 37 38 39 40 41')
     label_col_id = '42'
     use_context = False
 
